@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd src
+cd "$(dirname "$0")"
 python3 main.py
