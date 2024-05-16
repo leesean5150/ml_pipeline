@@ -1,3 +1,4 @@
 #!/bin/bash
 
-python src/main.py
+cd src
+python3 main.py
