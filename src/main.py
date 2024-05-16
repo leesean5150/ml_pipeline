@@ -51,7 +51,7 @@ preprocessor = ColumnTransformer(
 )
 pipeline_steps = [
     ('preprocessor', preprocessor),
-    ('classifier', LogisticRegression())
+    ('classifier', LogisticRegression(max_iter=1000))
 ]
 
 pipeline = Pipeline(pipeline_steps)
