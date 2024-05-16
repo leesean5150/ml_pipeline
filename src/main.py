@@ -22,8 +22,9 @@ def parse_env_list(env_var):
 conn = sqlite3.connect('data/calls.db')
 query = "SELECT * FROM calls"
 df = pd.read_sql_query(query, conn)
-
 conn.close()
+
+os.environ['PYTHON_ENV'] = 'development'
 
 categorical_features = parse_env_list("CATEGORICAL_FEATURES")
 numeric_features = parse_env_list("NUMERIC_FEATURES")
