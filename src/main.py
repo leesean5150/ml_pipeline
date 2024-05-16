@@ -16,9 +16,10 @@ load_dotenv()
 def parse_env_list(env_var):
     return os.getenv(env_var, "").split(",")
 
-base_dir = os.path.dirname(os.path.abspath(__file__))
-db_path = os.path.join(base_dir, "data", "calls.db")
-engine = create_engine(f'sqlite:///{db_path}')
+cwd = os.getcwd()
+relative_path = 'data/calls.db'
+absolute_path = os.path.join(cwd, relative_path)
+engine = create_engine(f'sqlite:///{absolute_path}')
 
 # engine = create_engine('sqlite:///data/calls.db')
 df = pd.read_sql_query("SELECT * FROM calls", engine)
