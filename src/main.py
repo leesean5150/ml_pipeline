@@ -8,23 +8,16 @@ from sklearn.metrics import accuracy_score
 import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
-import sqlite3
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
 def parse_env_list(env_var):
     return os.getenv(env_var, "").split(",")
-
 os.environ['PYTHON_ENV'] = 'development'
 
-# engine = create_engine('sqlite:///data/calls.db')
-cwd = os.getcwd()
-db_path = os.path.join(cwd, 'src', 'data', 'calls.db')
-engine = create_engine(f'sqlite:///{db_path}')
+engine = create_engine('sqlite:///src/data/calls.db')
 df = pd.read_sql_query("SELECT * FROM calls", engine)
-
 categorical_features = parse_env_list("CATEGORICAL_FEATURES")
 numeric_features = parse_env_list("NUMERIC_FEATURES")
 
