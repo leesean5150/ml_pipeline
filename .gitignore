@@ -3,5 +3,4 @@ Include
 Lib
 Scripts
 pyvenv.cfg
-src/data
 data
