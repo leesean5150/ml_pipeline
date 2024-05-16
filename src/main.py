@@ -16,13 +16,13 @@ load_dotenv()
 def parse_env_list(env_var):
     return os.getenv(env_var, "").split(",")
 
-# engine = create_engine('sqlite:///data/calls.db')
-# df = pd.read_sql_query("SELECT * FROM calls", engine)
+engine = create_engine('sqlite:///data/calls.db')
+df = pd.read_sql_query("SELECT * FROM calls", engine)
 
-conn = sqlite3.connect('data/calls.db')
-query = "SELECT * FROM calls"
-df = pd.read_sql_query(query, conn)
-conn.close()
+# conn = sqlite3.connect('data/calls.db')
+# query = "SELECT * FROM calls"
+# df = pd.read_sql_query(query, conn)
+# conn.close()
 
 os.environ['PYTHON_ENV'] = 'development'
 
