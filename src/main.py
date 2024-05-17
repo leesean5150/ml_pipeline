@@ -16,8 +16,11 @@ def parse_env_list(env_var):
     return os.getenv(env_var, "").split(",")
 os.environ['PYTHON_ENV'] = 'development'
 
-engine = create_engine('sqlite:///src/data/calls.db')
+base_dir = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(base_dir, 'data/calls.db')
+engine = create_engine(f'sqlite:///{db_path}')
 df = pd.read_sql_query("SELECT * FROM calls", engine)
+
 categorical_features = parse_env_list("CATEGORICAL_FEATURES")
 numeric_features = parse_env_list("NUMERIC_FEATURES")
 
