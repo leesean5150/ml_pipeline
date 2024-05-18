@@ -17,7 +17,7 @@ def parse_env_list(env_var):
 os.environ['PYTHON_ENV'] = 'development'
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-db_path = os.path.join(base_dir, 'data/calls.db')
+db_path = os.path.join(base_dir, '../data/calls.db')
 engine = create_engine(f'sqlite:///{db_path}')
 df = pd.read_sql_query("SELECT * FROM calls", engine)
 
