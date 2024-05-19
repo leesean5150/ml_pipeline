@@ -9,6 +9,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
+from imblearn.pipeline import Pipeline as ImbPipeline
+from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, confusion_matrix
 
@@ -79,8 +81,19 @@ class ModelPipeline:
                 ("numeric", numeric_processor, self.numeric_features)
             ]
         )
-        return Pipeline(steps=[('preprocessor', preprocessor), ('classifier', self.algorithm)])
-    
+        if (os.getenv("ADD_SMOTE") == "True"):
+            return ImbPipeline(steps=[
+                ('preprocessor', preprocessor),
+                ('smote', SMOTE(random_state=42)),
+                ('classifier', self.algorithm)
+                ]
+        )
+        return Pipeline(steps=[
+                ('preprocessor', preprocessor),
+                ('classifier', self.algorithm)
+                ] 
+        )
+
     def train_and_evaluate(self, X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series, n_runs: int):
         accuracy_total = 0
         precision_total = 0

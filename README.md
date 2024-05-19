@@ -45,6 +45,10 @@ error / ignore
 
 - For NUMBER_OF_RUNS, it indicates the number of times the pipeline should be ran. The return result of the pipeline would be the average of the number of runs specified here. The default should be left at 10.
 
+- For ADD_SMOTE, it indicated whether or not the Synthetic Minority Over-sampling Technique is applied to the final pipeline. However due to the heavy drop in accuracy and precision, the default should be left at False. The default configurations to choose from are:
+True/False\
+Only one option should be chosen
+
 - For ALGORITHM, it indicates the algorithm used for building the model. The default configurations to choose from are:
  RandomForest / GradientBoosting / DecisionTree \
  Only one option should be chosen.
@@ -57,7 +61,7 @@ error / ignore
 
     - GRADIENT_LEARNING_RATE, which indicates the amount of contribution that each new tree has for the models overall prediction. The default should be left at 0.1.
 ## Pipeline Logic
-The overarching pipeline consists of a preprocessing step followed by the classifier. This passes the cleaned and processed data into the machine learning model to generate a model to predict whether the call is a scam.This can be seen in the image below:\
+The overarching pipeline consists of a preprocessing step followed by the classifier. This passes the cleaned and processed data into the machine learning model to generate a model to predict whether the call is a scam. There was an attempt to use the Synthetic Minority Over-sampling Technique because of the overwhelming number of non-scam calls in comparison to scam calls, but it caused accuracy and precision of the model to drop significantly, so it was dropped from the planned pipeline. The code however, remains in main.py and there is an option to toggle it on or off in the .env file. This can be seen in the image below:\
 \
 The preprocessing step is a column transformer which helps to handle potential errors in the dataset. This column transformer contains two different pipelines, the categorical processor and the numerical processor, to handle the categorical column and the numerical column respectively. This can be seen in the image below:\
 \
@@ -103,8 +107,12 @@ The final step in the pipeline is evaluating the performance of the model using 
 ## Choice of models
 Based on the problem statement, the task at hand is a supervised classification task. This is because we are given a labelled dataset (whether or not the call is a scam) and we are tasked to create a model that can classify each call. Because of this, the choice of models are as shown below:
 - Decision Tree
-    - Due to high dimensionality of the data, 
+    - Decision Tree is a suitable model for this task becasuse it can return a categorical result, making it suitable for the classification task at hand.
+    - It handles non-linear relationship between the features better than other potential algorithms, like logistic regression, allowing it to perform better.
+    - Despite being a weak learner, the Decision Tree model is much faster compared to the other algorithms chosen, so it is good for quick exploration and initial model prototyping.
 - Gradient Boosting
-    - 
+    - Gradient Boosting is a suitable model for this task because it is an ensemble method making use of decision trees, thus gaining the benefits of using a decision tree.
+    - On top of the things mentioned above from the decision tree, it also gives higher weightage to errors, since it makes the trees learn in order and correct the previous trees errors. This leads to a more accurate model.
 - Random Forest
-    - 
+    - Random Forest is a suitable model for this task because it is an ensemble method making use of decision trees, thus gaining the benefits of using a decision tree.
+    - On top of the things mentioned above from the decision tree, it also introduces a random element to the dataset that is fed to each tree. This leads to less overfitting in the model.
