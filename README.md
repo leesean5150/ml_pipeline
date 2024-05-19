@@ -61,13 +61,13 @@ Only one option should be chosen
 
     - GRADIENT_LEARNING_RATE, which indicates the amount of contribution that each new tree has for the models overall prediction. The default should be left at 0.1.
 ## Pipeline Logic
-The overarching pipeline consists of a preprocessing step followed by the classifier. This passes the cleaned and processed data into the machine learning model to generate a model to predict whether the call is a scam. There was an attempt to use the Synthetic Minority Over-sampling Technique because of the overwhelming number of non-scam calls in comparison to scam calls, but it caused accuracy and precision of the model to drop significantly, so it was dropped from the planned pipeline. The code however, remains in main.py and there is an option to toggle it on or off in the .env file. This can be seen in the image below:\
+The overarching pipeline consists of a preprocessing step followed by the classifier. This passes the cleaned and processed data into the machine learning model to generate a model to predict whether the call is a scam. There was an attempt to use the Synthetic Minority Over-sampling Technique because of the overwhelming number of non-scam calls in comparison to scam calls, but it caused accuracy and precision of the model to drop significantly, so it was dropped from the planned pipeline. The code however, remains in main.py and there is an option to toggle it on or off in the .env file.\
 \
-The preprocessing step is a column transformer which helps to handle potential errors in the dataset. This column transformer contains two different pipelines, the categorical processor and the numerical processor, to handle the categorical column and the numerical column respectively. This can be seen in the image below:\
+The preprocessing step is a column transformer which helps to handle potential errors in the dataset. This column transformer contains two different pipelines, the categorical processor and the numerical processor, to handle the categorical column and the numerical column respectively.\
 \
-The categorical processor contains two steps, SimpleImputer and OneHotencoder. The SimpleImputer handles missing/null values in the column, and applies the chosen strategy to it, while the OneHotEncoder handles unkown categories that were not seen in the training set, and applies the chosen strategy to it. This can be seen in the image below:\
+The categorical processor contains two steps, SimpleImputer and OneHotencoder. The SimpleImputer handles missing/null values in the column, and applies the chosen strategy to it, while the OneHotEncoder handles unkown categories that were not seen in the training set, and applies the chosen strategy to it.\
 \
-The numerical processor contains two steps as well, SimpleImputer and StandardScaler. The SimpleImputer handles missing/null values in the column, and applies the chosen strategy to it, while the StandardScaler normalizes the data, so that everything is properly scaled. This can be seen in the image below:\
+The numerical processor contains two steps as well, SimpleImputer and StandardScaler. The SimpleImputer handles missing/null values in the column, and applies the chosen strategy to it, while the StandardScaler normalizes the data, so that everything is properly scaled.\
 \
 Before the data is even passed into either the numerical or categorical processor, it also need to be cleaned and transformed. This step includes:
 - Removing non_unique IDS
@@ -78,6 +78,13 @@ After all the data is processed, the data is split into training set and test se
 Once trained, the model is fed the test set, to try and predict the target, which in this is case is whether or not the call is a scam.\
 \
 The final step in the pipeline is evaluating the performance of the model using the following performance metrics: accuracy, precision and confusion matrix. This is printed to the console for the user to review.
+## Processing of Data
+|ID|Call Duration|Call Frequency|Financial Loss|Flagged By Carrier|Is International|Previous Contact Count|Country Prefix|Call Type|Timestamp|Year|Month|Day|Hour|Device Battery|
+|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|
+|StandardScaler|StandardScaler|StandardScaler|StandardScaler|StandardScaler|StandardScaler|OneHotEncoder|OneHotEncoder|StandardScaler|OneHotEncoder|OneHotEncoder|OneHotEncoder|OneHotEncoder|OneHotEncoder|OneHotEncoder|
+|Check for unique values|-|-|-|-|-|-|-|-|Convert to date and time|-|-|-|-|-|
+
 ## Overview of EDA 
 - There is a repeated Call Type, Whats App and Whatsapp
 - Financial Loss contains 1403 null entries
@@ -98,13 +105,8 @@ The final step in the pipeline is evaluating the performance of the model using 
 - Data is conclusive that Day has no correlation with scam calls.
 - Data is conclusive that Hour has a correlation with scam calls.
 - Data is conclusive that Battery Device has no correlation with scam calls.
-## Processing of Datasets
-|Categorical|Numerical|
-|-|-|
-|SimpleImputer|SimpleImputer|
-|OneHotEncoder|StandardScaler|
 
-## Choice of models
+## Choice of Models
 Based on the problem statement, the task at hand is a supervised classification task. This is because we are given a labelled dataset (whether or not the call is a scam) and we are tasked to create a model that can classify each call. Because of this, the choice of models are as shown below:
 - Decision Tree
     - Decision Tree is a suitable model for this task becasuse it can return a categorical result, making it suitable for the classification task at hand.
@@ -116,3 +118,11 @@ Based on the problem statement, the task at hand is a supervised classification 
 - Random Forest
     - Random Forest is a suitable model for this task because it is an ensemble method making use of decision trees, thus gaining the benefits of using a decision tree.
     - On top of the things mentioned above from the decision tree, it also introduces a random element to the dataset that is fed to each tree. This leads to less overfitting in the model.
+## Evaluation of Models
+There are three methods of evaluation used for this task:
+- Accuracy: arguably the most important metric out of all three, because it talks about how well the model can predict whether or not the call is a scam based on the given parameters. A higher accuracy means that the model is able to better predict scam calls which directly solves the problem statement of identifying scam calls.
+- Precision: although important, it is not what makes or break this model, because it just measures the ratio of true positives / actual positives. This is an important consideration however, since we do not want to be classifying non-scam calls as scam calls since it might put the user or caller through unnecessary inconvenience in a real world setting, since the situation is still reversible.
+- Confusion Matrix: arguably also one of the more important metrics, but more specifically, the measure of false negatives and actual negatives. In the real world setting, the repurcussions of a false negative is very high, since the model is classifying a scam call as a non-scam call, which could result in the user being scammed, which is likely to be irreversible.
+### Decision Tree
+### Gradient Boosting
+### Random Forest
