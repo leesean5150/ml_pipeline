@@ -121,34 +121,34 @@ Based on the problem statement, the task at hand is a supervised classification 
 There are three methods of evaluation used for this task:
 - Accuracy: accuracy talks about how well the model can predict the nature of the call based on the given parameters. A higher accuracy means that the model is able to better predict whether the call is a scam or not which directly solves the problem statement of identifying scam calls. However, this metric cannot be the only metric used to evaluate the model. Since majority of the data entries are non-scam calls, we want to avoid the model just guessing that every call is not a scam call to get a high accuracy. 
 - Precision: precision measures the ratio of true positives / total positives. This is an important consideration since we do not want to be classifying non-scam calls as scam calls since it might put the user or caller through unnecessary inconvenience in a real world setting.
-- Confusion Matrix: arguably also one of the more important metrics, more specifically, the measure of false negatives and actual negatives. In the real world setting, the repurcussions of a false negative is very high, since the model is classifying a scam call as a non-scam call, which could result in the user being scammed, which is likely to be irreversible.
+- Confusion Matrix: arguably also one of the more important metrics, more specifically, the measure of false negatives that should be actual positives. In the real world setting, the repurcussions of a false negative is very high, since the model is classifying a scam call as a non-scam call, which could result in the user being scammed, which is likely to be irreversible.
 To average out fluctuations in each run of the model, the average of a set number of runs is returned each time so that the results are more consistent.
 ### Decision Tree
-- Running the default configurations, these are the initial results, Accuracy: 79.05%, Precision: 71.61%, ratio of incorrectly classified scam calls: 28.36%. 
+- Running the default configurations, these are the initial results, Accuracy: 79.05%, Precision: 71.61%, ratio of false negatives to actual positives: 28.36%. 
 - After optimising, the optimal configuration is:
 \
 CATEGORICAL_FEATURES: Flagged by Carrier, Is International, Country Prefix, Call Type, Hour\
 NUMERIC_FEATURES: Call Duration, Call Frequency, Financial Loss, Previous Contact Count
-- This configurations yields the results Accuracy: 79.38%, Precision 72.73%, ratio of incorrectly classified scam calls: 27.21%.
+- This configurations yields the results Accuracy: 79.38%, Precision 72.73%, ratio of false negatives to actual positives: 27.21%.
 - For the features call duration, is international and previous contact count, the results are different with what was found in the data exploration since the data suggested dropping them due to the lack of correlation, but during the actual model training, the performance was better when these features were included. This could be due to the fact that these features have interaction effects with other features, which helps to improve the model's performance.
 ### Gradient Boosting
-- Running the default configurations, these are the initial results, Accuracy: 83.64%, Precision: 88.70%, ratio of incorrectly classified scam calls: 11.25%. 
+- Running the default configurations, these are the initial results, Accuracy: 83.64%, Precision: 88.70%, ratio of false negatives to actual positives: 11.25%. 
 - After optimising, the optimal configuration is:
 \
 CATEGORICAL_FEATURES=Call Type,Year,Month,Day,Hour,Device Battery\
 NUMERIC_FEATURES=Call Frequency,Financial Loss\
 GRADIENT_NUMBER_OF_DECISIONS_TREES=100\
 GRADIENT_LEARNING_RATE=0.2\
-- This configurations yields the results Accuracy: 82.95%, Precision 96.11%, ratio of incorrectly classified scam calls: 3.86%.
+- This configurations yields the results Accuracy: 82.95%, Precision 96.11%, ratio of false negatives to actual positives: 3.86%.
 - For this algorithm, it is more in line with what was found during data exploration, with the only conflict being device battery, which again could be due to the feature having interaction effects with other features, which helps to improve the model's performance.
 - Although it can be seen that the model's overall accuracy dropped after optimisation, there was a large increase in the precision and a big drop in false negatives. This is especially important for this task, because even though its accuracy may not be very high, it has very few errors when it comes to true positives and false negatives. Accuracy only takes a hit because of the increase in error rate for true negatives.
 ### Random Forest
-- Running the default configurations, these are the initial results, Accuracy: 82.75%, Precision: 86.94%, ratio of incorrectly classified scam calls: 13.05%. 
+- Running the default configurations, these are the initial results, Accuracy: 82.75%, Precision: 86.94%, ratio of false negatives to actual positives: 13.05%. 
 - After optimising, the optimal configuration is:
 \
 CATEGORICAL_FEATURES=Call Type,Year,Month,Day,Hour,Device Battery\
 NUMERIC_FEATURES=Call Duration,Call Frequency,Financial Loss,Previous Contact Count
-- This configurations yields the results Accuracy: 82.21%, Precision 92.77%, ratio of incorrectly classified scam calls: 7.22%.
+- This configurations yields the results Accuracy: 82.21%, Precision 92.77%, ratio of false negatives to actual positives: 7.22%.
 - For the features call duration, device battery and previous contact count, the results are different with what was found in the data exploration since the data suggested dropping them due to the lack of correlation, but during the actual model training, the performance was better when these features were included. This could be due to the fact that these features have interaction effects with other features, which helps to improve the model's performance.
 - Although it can be seen that the model's overall accuracy dropped after optimisation, there was a large increase in the precision and a big drop in false negatives. This is especially important for this task, because even though its accuracy may not be very high, it has very few errors when it comes to true positives and false negatives. Accuracy only takes a hit because of the increase in error rate for true negatives.
 ## Conclusion
