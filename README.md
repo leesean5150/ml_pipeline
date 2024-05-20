@@ -77,13 +77,13 @@ After all the data is processed, the data is split into training set and test se
 \
 Once trained, the model is fed the test set, to try and predict the target, which in this is case is whether or not the call is a scam.\
 \
-The final step in the pipeline is evaluating the performance of the model using the following performance metrics: accuracy, precision and confusion matrix. This is printed to the console for the user to review.
+The final step in the pipeline is evaluating the performance of the model using the following performance metrics: accuracy, precision and confusion matrix. This step is repeated a set number of times based on the .env configuration and the average of each metric is returned. This is printed to the console for the user to review.
 ## Processing of Data
 |ID|Call Duration|Call Frequency|Financial Loss|Flagged By Carrier|Is International|Previous Contact Count|Country Prefix|Call Type|Timestamp|Year|Month|Day|Hour|Device Battery|
 |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
 |SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|SimpleImputer|
 |StandardScaler|StandardScaler|StandardScaler|StandardScaler|StandardScaler|StandardScaler|OneHotEncoder|OneHotEncoder|StandardScaler|OneHotEncoder|OneHotEncoder|OneHotEncoder|OneHotEncoder|OneHotEncoder|OneHotEncoder|
-|Check for unique values|-|-|-|-|-|-|-|-|Convert to date and time|-|-|-|-|-|
+|Check for unique values|-|-|-|-|-|-|-|Convert Whats App to Whatsapp|Convert to date and time|-|-|-|-|-|
 
 ## Overview of EDA 
 - There is a repeated Call Type, Whats App and Whatsapp
@@ -120,9 +120,12 @@ Based on the problem statement, the task at hand is a supervised classification 
     - On top of the things mentioned above from the decision tree, it also introduces a random element to the dataset that is fed to each tree. This leads to less overfitting in the model.
 ## Evaluation of Models
 There are three methods of evaluation used for this task:
-- Accuracy: arguably the most important metric out of all three, because it talks about how well the model can predict whether or not the call is a scam based on the given parameters. A higher accuracy means that the model is able to better predict scam calls which directly solves the problem statement of identifying scam calls.
-- Precision: although important, it is not what makes or break this model, because it just measures the ratio of true positives / actual positives. This is an important consideration however, since we do not want to be classifying non-scam calls as scam calls since it might put the user or caller through unnecessary inconvenience in a real world setting, since the situation is still reversible.
+- Accuracy: arguably the most important metric out of all three, because it talks about how well the model can predict whether or not the call is a scam based on the given parameters. A higher accuracy means that the model is able to better predict scam calls which directly solves the problem statement of identifying scam calls. However, this metric cannot be the only metric used to evaluate the model. Since majority of the data entries are non-scam calls, we want to avoid the model just guessing that every call is not a scam call to get a high accuracy. 
+- Precision: although important, it is not what makes or break this model, because it just measures the ratio of true positives / total positives. This is an important consideration however, since we do not want to be classifying non-scam calls as scam calls since it might put the user or caller through unnecessary inconvenience in a real world setting.
 - Confusion Matrix: arguably also one of the more important metrics, but more specifically, the measure of false negatives and actual negatives. In the real world setting, the repurcussions of a false negative is very high, since the model is classifying a scam call as a non-scam call, which could result in the user being scammed, which is likely to be irreversible.
+To average out fluctuations in each run of the model, the average of a set number of runs is returned each time so that the results are more consistent.
 ### Decision Tree
+- Running the default configurations, these are the initial results, Accuracy: 79.05%, Precision 71.61%, ratio of incorrectly classified scam calls: 28.36%. 
+- After optimising, the optimal configuration is , with the results Accuracy: %, Precision %, ratio of incorrectly classified scam calls: %.
 ### Gradient Boosting
 ### Random Forest
