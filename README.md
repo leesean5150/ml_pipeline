@@ -120,12 +120,42 @@ Based on the problem statement, the task at hand is a supervised classification 
     - On top of the things mentioned above from the decision tree, it also introduces a random element to the dataset that is fed to each tree. This leads to less overfitting in the model.
 ## Evaluation of Models
 There are three methods of evaluation used for this task:
-- Accuracy: arguably the most important metric out of all three, because it talks about how well the model can predict whether or not the call is a scam based on the given parameters. A higher accuracy means that the model is able to better predict scam calls which directly solves the problem statement of identifying scam calls. However, this metric cannot be the only metric used to evaluate the model. Since majority of the data entries are non-scam calls, we want to avoid the model just guessing that every call is not a scam call to get a high accuracy. 
-- Precision: although important, it is not what makes or break this model, because it just measures the ratio of true positives / total positives. This is an important consideration however, since we do not want to be classifying non-scam calls as scam calls since it might put the user or caller through unnecessary inconvenience in a real world setting.
-- Confusion Matrix: arguably also one of the more important metrics, but more specifically, the measure of false negatives and actual negatives. In the real world setting, the repurcussions of a false negative is very high, since the model is classifying a scam call as a non-scam call, which could result in the user being scammed, which is likely to be irreversible.
+- Accuracy: accuracy talks about how well the model can predict the nature of the call based on the given parameters. A higher accuracy means that the model is able to better predict whether the call is a scam or not which directly solves the problem statement of identifying scam calls. However, this metric cannot be the only metric used to evaluate the model. Since majority of the data entries are non-scam calls, we want to avoid the model just guessing that every call is not a scam call to get a high accuracy. 
+- Precision: precision measures the ratio of true positives / total positives. This is an important consideration since we do not want to be classifying non-scam calls as scam calls since it might put the user or caller through unnecessary inconvenience in a real world setting.
+- Confusion Matrix: arguably also one of the more important metrics, more specifically, the measure of false negatives and actual negatives. In the real world setting, the repurcussions of a false negative is very high, since the model is classifying a scam call as a non-scam call, which could result in the user being scammed, which is likely to be irreversible.
 To average out fluctuations in each run of the model, the average of a set number of runs is returned each time so that the results are more consistent.
 ### Decision Tree
-- Running the default configurations, these are the initial results, Accuracy: 79.05%, Precision 71.61%, ratio of incorrectly classified scam calls: 28.36%. 
-- After optimising, the optimal configuration is , with the results Accuracy: %, Precision %, ratio of incorrectly classified scam calls: %.
+- Running the default configurations, these are the initial results, Accuracy: 79.05%, Precision: 71.61%, ratio of incorrectly classified scam calls: 28.36%. 
+- After optimising, the optimal configuration is:
+\
+CATEGORICAL_FEATURES: Flagged by Carrier, Is International, Country Prefix, Call Type, Hour\
+NUMERIC_FEATURES: Call Duration, Call Frequency, Financial Loss, Previous Contact Count
+- This configurations yields the results Accuracy: 79.38%, Precision 72.73%, ratio of incorrectly classified scam calls: 27.21%.
+- For the features call duration, is international and previous contact count, the results are different with what was found in the data exploration since the data suggested dropping them due to the lack of correlation, but during the actual model training, the performance was better when these features were included. This could be due to the fact that these features have interaction effects with other features, which helps to improve the model's performance.
 ### Gradient Boosting
+- Running the default configurations, these are the initial results, Accuracy: 83.64%, Precision: 88.70%, ratio of incorrectly classified scam calls: 11.25%. 
+- After optimising, the optimal configuration is:
+\
+CATEGORICAL_FEATURES=Call Type,Year,Month,Day,Hour,Device Battery\
+NUMERIC_FEATURES=Call Frequency,Financial Loss\
+GRADIENT_NUMBER_OF_DECISIONS_TREES=100\
+GRADIENT_LEARNING_RATE=0.2\
+- This configurations yields the results Accuracy: 82.95%, Precision 96.11%, ratio of incorrectly classified scam calls: 3.86%.
+- For this algorithm, it is more in line with what was found during data exploration, with the only conflict being device battery, which again could be due to the feature having interaction effects with other features, which helps to improve the model's performance.
+- Although it can be seen that the model's overall accuracy dropped after optimisation, there was a large increase in the precision and a big drop in false negatives. This is especially important for this task, because even though its accuracy may not be very high, it has very few errors when it comes to true positives and false negatives. Accuracy only takes a hit because of the increase in error rate for true negatives.
 ### Random Forest
+- Running the default configurations, these are the initial results, Accuracy: 82.75%, Precision: 86.94%, ratio of incorrectly classified scam calls: 13.05%. 
+- After optimising, the optimal configuration is:
+\
+CATEGORICAL_FEATURES=Call Type,Year,Month,Day,Hour,Device Battery\
+NUMERIC_FEATURES=Call Duration,Call Frequency,Financial Loss,Previous Contact Count
+- This configurations yields the results Accuracy: 82.21%, Precision 92.77%, ratio of incorrectly classified scam calls: 7.22%.
+- For the features call duration, device battery and previous contact count, the results are different with what was found in the data exploration since the data suggested dropping them due to the lack of correlation, but during the actual model training, the performance was better when these features were included. This could be due to the fact that these features have interaction effects with other features, which helps to improve the model's performance.
+- Although it can be seen that the model's overall accuracy dropped after optimisation, there was a large increase in the precision and a big drop in false negatives. This is especially important for this task, because even though its accuracy may not be very high, it has very few errors when it comes to true positives and false negatives. Accuracy only takes a hit because of the increase in error rate for true negatives.
+## Conclusion
+Overall, the model that had the better performance for this specific task would be the Gradient Boosting algorithm with the optimised configurations. This is because the model boasts much better performance in terms of detection of true positives and prevention of false negatives, protecting the user from scam calls. However, it must be noted that this decrease the number of true negatives, which could cause more non-scam calls to be wrongly classified as a scam call. I feel that this is a more appropriate approach for this task, because false negatives are more detrimental than false positives when it comes to scam calls.
+### Further Considerations
+- More data should be used to better train the model, allowing the algorithm to improve in terms of accuracy because that is what is lacking now.
+- There are many more hyperparameters for the Gradient Boosting algorithm which can be furthur tuned to improve performance.
+- A docker container should be considered when it comes to deploying the pipeline to improve reproducibility of the results.
+- This pipeline could also be integrated with a web/mobile application to handle inputting of new data to the database as well as toggling features or hyper parameters.
