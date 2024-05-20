@@ -116,7 +116,7 @@ def main():
     os.environ['PYTHON_ENV'] = 'development'
     
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(base_dir, 'data/calls.db')
+    db_path = os.path.join(base_dir, '../data/calls.db')
     
     processor = DataProcessor(db_path)
     df = processor.load_data()
