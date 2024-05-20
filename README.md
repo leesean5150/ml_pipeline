@@ -45,7 +45,7 @@ error / ignore
 
 - For NUMBER_OF_RUNS, it indicates the number of times the pipeline should be ran. The return result of the pipeline would be the average of the number of runs specified here. The default should be left at 10.
 
-- For ADD_SMOTE, it indicated whether or not the Synthetic Minority Over-sampling Technique is applied to the final pipeline. However due to the heavy drop in accuracy and precision, the default should be left at False. The default configurations to choose from are:
+- For ADD_SMOTE, it indicates whether or not the Synthetic Minority Over-sampling Technique is applied to the final pipeline. However due to the heavy drop in accuracy and precision, the default should be left at False. The default configurations to choose from are:
 True/False\
 Only one option should be chosen
 
@@ -58,7 +58,6 @@ Only one option should be chosen
 
 - If GradientBoosting is chosen, you may choose to update:
     - GRADIENT_NUMBER_OF_DECISIONS_TREES, which indicates the number of decision trees grown to train the model. The default should be left at 100.
-
     - GRADIENT_LEARNING_RATE, which indicates the amount of contribution that each new tree has for the models overall prediction. The default should be left at 0.1.
 ## Pipeline Logic
 The overarching pipeline consists of a preprocessing step followed by the classifier. This passes the cleaned and processed data into the machine learning model to generate a model to predict whether the call is a scam. There was an attempt to use the Synthetic Minority Over-sampling Technique because of the overwhelming number of non-scam calls in comparison to scam calls, but it caused accuracy and precision of the model to drop significantly, so it was dropped from the planned pipeline. The code however, remains in main.py and there is an option to toggle it on or off in the .env file.\
