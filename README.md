@@ -1,7 +1,3 @@
-
-# AIIP 3 Techinical Assessment
-Name: Lee Sean \
-Email: leesean18082001@gmail.com
 ## Project Directory
 ```bash
 ├── .github
